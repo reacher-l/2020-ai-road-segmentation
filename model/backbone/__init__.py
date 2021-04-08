@@ -1,0 +1,1 @@
+from .ibnresnet import resnet50_ibn_a
