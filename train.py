@@ -243,7 +243,7 @@ def train_model():
                 best_AA = AA
                 best_loss = epoch_loss
                 torch.save({
-                    'name': 'resnest50_lovasz_edge_rotate',
+                    'name': 'baseline+cosine+ms2+ema+uniformsample',
                     'epoch': epoch + 1,
                     'state_dict': ema_model.state_dict(),
                     'best_miou': best_miou,
