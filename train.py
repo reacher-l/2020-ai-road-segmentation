@@ -19,6 +19,7 @@ import torch.nn as nn
 import cv2
 import os
 from tensorboardX import SummaryWriter
+from model import UnetIBN
 from model.seg_hrnet import hrnet18
 
 parser = argparse.ArgumentParser()
@@ -76,7 +77,7 @@ def train_model():
     ema_model = create_model(ema=True)
     # model = hrnet18(pretrained=True).to(device)
     # model = nn.DataParallel(model)
-    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=0.0001)
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=0.0005)
     ema_optimizer = WeightEMA(model, ema_model, alpha=0.999)
     best_miou = 0.
     best_AA = 0.
@@ -245,11 +246,9 @@ def train_model():
                     'name': 'resnest50_lovasz_edge_rotate',
                     'epoch': epoch + 1,
                     'state_dict': ema_model.state_dict(),
-                    'best_miou': best_miou
-                }, args.save_path + folder_path+'/model_best.pth')
-                torch.save({
+                    'best_miou': best_miou,
                     'optimizer': optimizer.state_dict(),
-                }, args.save_path + folder_path+'/optimizer.pth')
+                }, args.save_path + folder_path+'/hrnet_ibnUnet+fft+wc0005.pth')
         time_elapsed = time.time() - since
         print('{:.0f}m {:.0f}s'.format(time_elapsed//60, time_elapsed%60))
         print('{:.0f}m {:.0f}s'.format(time_elapsed//60, time_elapsed%60),file=F_txt,flush=True)
